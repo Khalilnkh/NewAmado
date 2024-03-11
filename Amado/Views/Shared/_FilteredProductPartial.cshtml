@@ -1,0 +1,75 @@
+﻿@model PageNationList<Product>
+
+@foreach (Product product in Model)
+                    {
+                    <div class="col-12 col-sm-6 col-md-12 col-xl-6">
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img style="height: 510px;" src="~/assets/img/products/@product.MainImage" alt="Main Image">
+                                <!-- Hover Thumb -->
+                                <img style="height: 510px;" class="hover-img" src="~/assets/img/products/@product.HoverImage" alt="Hover Image">
+                            </div>
+
+                            <!-- Product Description -->
+                            <div class="product-description d-flex align-items-center justify-content-between">
+                                <!-- Product Meta Data -->
+                                <div class="product-meta-data">
+                                    <div class="line"></div>
+                                    <p class="product-price">$@product.Price</p>
+                                    <a asp-controller="shop" asp-action="detail" asp-route-id="@product.ID" id="productName">
+                                        <h6>@product.Name</h6>
+                                    </a>
+                                </div>
+                                <!-- Ratings & Cart -->
+                                <div class="ratings-cart text-right">
+                                    <div class="ratings">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="cart">
+                                        <a asp-controller="cart" asp-action="addToCart" asp-route-id="@product.ID" class="addToCart" data-toggle="tooltip" data-placement="left" title="Add to Cart">
+                                            <img src="~/assets/img/core-img/cart.png" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+               <div class="row w-100">
+                    <div class="col-12">
+                        <!-- Pagination -->
+                        <nav aria-label="navigation">
+                            <ul class="pagination justify-content-end mt-50">
+                                @for (int i = Model.Start; i <= Model.End; i++)
+                                {
+                                    <li class="page-item @(Model.PageIndex == i ? "active" :"")">
+                                        <a class="page-link" asp-controller="shop" asp-action="index" asp-route-page="@i" data-page="@i">@i</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+
+   <script>
+           $(document).ready(function () {
+                  $('.addToCart').click(function (e) {
+                      e.preventDefault();
+
+                      let url = $(this).attr('href');
+
+                      fetch(url).then(res => res.text())
+                          .then(data => {
+                              $('#cart-info').html(data);
+                          });
+                  })
+           });
+   </script>
+
